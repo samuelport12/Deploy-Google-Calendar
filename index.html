@@ -1,0 +1,1635 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VH Advogados - Calendário Jurídico</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+            min-height: 100vh;
+            color: #fff;
+        }
+
+        /* Decorative background */
+        .bg-decoration {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            overflow: hidden;
+            z-index: 0;
+        }
+
+        .bg-decoration::before {
+            content: '';
+            position: absolute;
+            top: -200px;
+            right: -200px;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(245, 158, 11, 0.1) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+
+        .bg-decoration::after {
+            content: '';
+            position: absolute;
+            bottom: -200px;
+            left: -200px;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(245, 158, 11, 0.08) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .logo-container {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 15px;
+        }
+
+        .logo {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 22px;
+            color: #fff;
+            box-shadow: 0 10px 30px rgba(245, 158, 11, 0.3);
+        }
+
+        .brand-name {
+            color: #f59e0b;
+            font-weight: 600;
+            font-size: 16px;
+            letter-spacing: 1px;
+        }
+
+        .header h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .header h1 span {
+            color: #f59e0b;
+        }
+
+        .header p {
+            color: #94a3b8;
+            font-size: 14px;
+        }
+
+        /* Stats */
+        .stats {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 25px;
+        }
+
+        .stat-card {
+            background: rgba(30, 41, 59, 0.5);
+            border: 1px solid rgba(71, 85, 105, 0.5);
+            border-radius: 12px;
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            backdrop-filter: blur(10px);
+        }
+
+        .stat-card.urgent {
+            background: rgba(239, 68, 68, 0.1);
+            border-color: rgba(239, 68, 68, 0.3);
+        }
+
+        .stat-icon {
+            font-size: 20px;
+        }
+
+        .stat-value {
+            font-size: 24px;
+            font-weight: 700;
+        }
+
+        .stat-card.urgent .stat-value {
+            color: #f87171;
+        }
+
+        .stat-label {
+            font-size: 11px;
+            color: #94a3b8;
+        }
+
+        /* Controls */
+        .controls {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .search-box {
+            flex: 1;
+            min-width: 250px;
+            position: relative;
+        }
+
+        .search-box input {
+            width: 100%;
+            background: rgba(30, 41, 59, 0.5);
+            border: 1px solid rgba(71, 85, 105, 0.5);
+            border-radius: 12px;
+            padding: 12px 16px 12px 44px;
+            color: #fff;
+            font-size: 14px;
+            outline: none;
+            transition: all 0.2s;
+        }
+
+        .search-box input:focus {
+            border-color: rgba(245, 158, 11, 0.5);
+            box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.1);
+        }
+
+        .search-box input::placeholder {
+            color: #64748b;
+        }
+
+        .search-box::before {
+            content: '🔍';
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 16px;
+        }
+
+        select {
+            background: rgba(30, 41, 59, 0.5);
+            border: 1px solid rgba(71, 85, 105, 0.5);
+            border-radius: 12px;
+            padding: 12px 16px;
+            color: #fff;
+            font-size: 14px;
+            outline: none;
+            cursor: pointer;
+        }
+
+        select:focus {
+            border-color: rgba(245, 158, 11, 0.5);
+        }
+
+        /* Main Layout */
+        .main-layout {
+            display: grid;
+            grid-template-columns: 1fr 380px;
+            gap: 20px;
+        }
+
+        @media (max-width: 900px) {
+            .main-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Calendar */
+        .calendar-card {
+            background: rgba(30, 41, 59, 0.3);
+            border: 1px solid rgba(71, 85, 105, 0.5);
+            border-radius: 16px;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+        }
+
+        .calendar-header {
+            background: linear-gradient(135deg, #1e293b, #334155);
+            padding: 16px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .nav-btn {
+            width: 40px;
+            height: 40px;
+            background: rgba(71, 85, 105, 0.5);
+            border: none;
+            border-radius: 10px;
+            color: #fff;
+            font-size: 18px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .nav-btn:hover {
+            background: rgba(245, 158, 11, 0.3);
+            transform: scale(1.05);
+        }
+
+        .month-title {
+            text-align: center;
+        }
+
+        .month-title h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .month-title span {
+            color: #f59e0b;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .weekdays {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            background: rgba(15, 23, 42, 0.5);
+            border-bottom: 1px solid rgba(71, 85, 105, 0.3);
+        }
+
+        .weekday {
+            padding: 12px;
+            text-align: center;
+            font-size: 12px;
+            font-weight: 600;
+            color: #f59e0b;
+        }
+
+        .weekday.weekend {
+            color: #64748b;
+        }
+
+        .days-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+        }
+
+        .day-cell {
+            min-height: 90px;
+            padding: 8px;
+            border-right: 1px solid rgba(71, 85, 105, 0.2);
+            border-bottom: 1px solid rgba(71, 85, 105, 0.2);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .day-cell:nth-child(7n) {
+            border-right: none;
+        }
+
+        .day-cell:hover {
+            background: rgba(245, 158, 11, 0.1);
+        }
+
+        .day-cell.selected {
+            background: rgba(245, 158, 11, 0.2);
+            box-shadow: inset 0 0 0 2px #f59e0b;
+        }
+
+        .day-cell.weekend {
+            background: rgba(15, 23, 42, 0.4);
+        }
+
+        .day-cell.today {
+            background: rgba(245, 158, 11, 0.1);
+        }
+
+        .day-cell.empty {
+            background: rgba(15, 23, 42, 0.3);
+            cursor: default;
+        }
+
+        .day-number {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 4px;
+        }
+
+        .day-number span {
+            font-size: 14px;
+            font-weight: 600;
+            color: #e2e8f0;
+        }
+
+        .day-cell.weekend .day-number span {
+            color: #64748b;
+        }
+
+        .day-cell.selected .day-number span {
+            color: #f59e0b;
+        }
+
+        .day-indicators {
+            display: flex;
+            gap: 3px;
+        }
+
+        .indicator {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+        }
+
+        .indicator.event {
+            background: #f59e0b;
+        }
+
+        .indicator.urgent {
+            background: #ef4444;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .day-events {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            overflow: hidden;
+        }
+
+        .event-pill {
+            font-size: 10px;
+            padding: 2px 6px;
+            border-radius: 4px;
+            color: #fff;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .event-pill.audiencia { background: #f59e0b; }
+        .event-pill.prazo { background: #ef4444; }
+        .event-pill.reuniao { background: #3b82f6; }
+        .event-pill.pericia { background: #a855f7; }
+        .event-pill.protocolo { background: #22c55e; }
+        .event-pill.outro { background: #6b7280; }
+
+        .more-events {
+            font-size: 10px;
+            color: #94a3b8;
+            padding-left: 6px;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .panel {
+            background: rgba(30, 41, 59, 0.3);
+            border: 1px solid rgba(71, 85, 105, 0.5);
+            border-radius: 16px;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+        }
+
+        .panel-header {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            padding: 16px;
+        }
+
+        .panel-header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .panel-header small {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 12px;
+        }
+
+        .panel-header h3 {
+            font-size: 1.25rem;
+            font-weight: 700;
+        }
+
+        .add-btn {
+            width: 36px;
+            height: 36px;
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            border-radius: 50%;
+            color: #fff;
+            font-size: 20px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .add-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.1);
+        }
+
+        .panel-body {
+            padding: 16px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 30px 20px;
+            color: #64748b;
+        }
+
+        .empty-state .icon {
+            font-size: 40px;
+            margin-bottom: 10px;
+        }
+
+        .event-item {
+            padding: 12px;
+            background: rgba(51, 65, 85, 0.3);
+            border-radius: 10px;
+            margin-bottom: 10px;
+            border-left: 4px solid;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .event-item:hover {
+            background: rgba(51, 65, 85, 0.5);
+            transform: translateX(4px);
+        }
+
+        .event-item.audiencia { border-color: #f59e0b; }
+        .event-item.prazo { border-color: #ef4444; }
+        .event-item.reuniao { border-color: #3b82f6; }
+        .event-item.pericia { border-color: #a855f7; }
+        .event-item.protocolo { border-color: #22c55e; }
+        .event-item.outro { border-color: #6b7280; }
+
+        .event-item-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 6px;
+        }
+
+        .event-item-header .icon {
+            font-size: 16px;
+        }
+
+        .event-item-header .title {
+            flex: 1;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .priority-badge {
+            font-size: 10px;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-weight: 500;
+        }
+
+        .priority-badge.alta {
+            background: rgba(239, 68, 68, 0.2);
+            color: #f87171;
+        }
+
+        .priority-badge.media {
+            background: rgba(245, 158, 11, 0.2);
+            color: #fbbf24;
+        }
+
+        .priority-badge.baixa {
+            background: rgba(34, 197, 94, 0.2);
+            color: #4ade80;
+        }
+
+        .event-item-details {
+            font-size: 12px;
+            color: #94a3b8;
+        }
+
+        .event-item-details span {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            margin-right: 12px;
+        }
+
+        /* Quick Actions */
+        .quick-actions {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            padding: 16px;
+        }
+
+        .quick-btn {
+            padding: 12px;
+            background: rgba(51, 65, 85, 0.3);
+            border: 1px solid rgba(71, 85, 105, 0.5);
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: left;
+        }
+
+        .quick-btn:hover {
+            border-color: rgba(245, 158, 11, 0.5);
+            transform: translateY(-2px);
+        }
+
+        .quick-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .quick-btn .icon {
+            font-size: 20px;
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .quick-btn .label {
+            font-size: 12px;
+            color: #e2e8f0;
+        }
+
+        /* Legend */
+        .legend {
+            padding: 16px;
+        }
+
+        .legend h4 {
+            font-size: 14px;
+            margin-bottom: 12px;
+            color: #e2e8f0;
+        }
+
+        .legend-items {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 12px;
+            color: #94a3b8;
+        }
+
+        .legend-color {
+            width: 12px;
+            height: 12px;
+            border-radius: 4px;
+        }
+
+        /* Modal */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(4px);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal {
+            background: #1e293b;
+            border: 1px solid rgba(71, 85, 105, 0.5);
+            border-radius: 16px;
+            width: 100%;
+            max-width: 480px;
+            max-height: 90vh;
+            overflow: hidden;
+            animation: modalIn 0.2s ease-out;
+        }
+
+        @keyframes modalIn {
+            from {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .modal-header {
+            padding: 16px 20px;
+            border-bottom: 1px solid rgba(71, 85, 105, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .modal-header h3 {
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .close-btn {
+            width: 32px;
+            height: 32px;
+            background: rgba(71, 85, 105, 0.5);
+            border: none;
+            border-radius: 8px;
+            color: #94a3b8;
+            font-size: 18px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .close-btn:hover {
+            background: rgba(239, 68, 68, 0.3);
+            color: #f87171;
+        }
+
+        .modal-body {
+            padding: 20px;
+            overflow-y: auto;
+            max-height: calc(90vh - 140px);
+        }
+
+        .date-display {
+            background: rgba(245, 158, 11, 0.1);
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            border-radius: 12px;
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .date-display .icon {
+            font-size: 24px;
+        }
+
+        .date-display .date {
+            color: #f59e0b;
+            font-weight: 600;
+        }
+
+        .date-display .weekday {
+            color: #94a3b8;
+            font-size: 12px;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 13px;
+            color: #94a3b8;
+            margin-bottom: 6px;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            background: rgba(51, 65, 85, 0.5);
+            border: 1px solid rgba(71, 85, 105, 0.5);
+            border-radius: 10px;
+            padding: 12px 14px;
+            color: #fff;
+            font-size: 14px;
+            outline: none;
+            transition: all 0.2s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            border-color: rgba(245, 158, 11, 0.5);
+            box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.1);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .priority-options {
+            display: flex;
+            gap: 8px;
+        }
+
+        .priority-option {
+            flex: 1;
+            padding: 10px;
+            background: rgba(51, 65, 85, 0.5);
+            border: 1px solid rgba(71, 85, 105, 0.5);
+            border-radius: 10px;
+            color: #94a3b8;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: center;
+        }
+
+        .priority-option:hover {
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .priority-option.active.alta {
+            background: rgba(239, 68, 68, 0.2);
+            border-color: #ef4444;
+            color: #f87171;
+        }
+
+        .priority-option.active.media {
+            background: rgba(245, 158, 11, 0.2);
+            border-color: #f59e0b;
+            color: #fbbf24;
+        }
+
+        .priority-option.active.baixa {
+            background: rgba(34, 197, 94, 0.2);
+            border-color: #22c55e;
+            color: #4ade80;
+        }
+
+        .modal-footer {
+            padding: 16px 20px;
+            border-top: 1px solid rgba(71, 85, 105, 0.5);
+            display: flex;
+            gap: 12px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 12px 20px;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: none;
+        }
+
+        .btn-secondary {
+            background: rgba(71, 85, 105, 0.5);
+            color: #e2e8f0;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(71, 85, 105, 0.7);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            color: #fff;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(245, 158, 11, 0.4);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .btn-danger {
+            background: rgba(239, 68, 68, 0.2);
+            color: #f87171;
+            border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+
+        .btn-danger:hover {
+            background: rgba(239, 68, 68, 0.3);
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 30px 20px;
+            border-top: 1px solid rgba(71, 85, 105, 0.3);
+            margin-top: 30px;
+        }
+
+        .footer p {
+            color: #64748b;
+            font-size: 13px;
+        }
+
+        .footer span {
+            color: #f59e0b;
+        }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #1e293b;
+            border: 1px solid rgba(71, 85, 105, 0.5);
+            border-radius: 12px;
+            padding: 14px 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            transform: translateX(120%);
+            transition: transform 0.3s ease;
+            z-index: 1001;
+        }
+
+        .toast.show {
+            transform: translateX(0);
+        }
+
+        .toast.success {
+            border-color: rgba(34, 197, 94, 0.5);
+        }
+
+        .toast .icon {
+            font-size: 20px;
+        }
+
+        .toast .message {
+            font-size: 14px;
+            color: #e2e8f0;
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-decoration"></div>
+
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="logo-container">
+                <div class="logo">VH</div>
+                <span class="brand-name">VICTOR HUGO ADVOGADOS</span>
+            </div>
+            <h1>Calendário <span>Jurídico</span></h1>
+            <p>Sistema de Gestão de Prazos e Compromissos</p>
+        </header>
+
+        <!-- Stats -->
+        <div class="stats" id="stats">
+            <div class="stat-card">
+                <span class="stat-icon">📅</span>
+                <div>
+                    <div class="stat-value" id="stat-total">0</div>
+                    <div class="stat-label">Total</div>
+                </div>
+            </div>
+            <div class="stat-card">
+                <span class="stat-icon">⚖️</span>
+                <div>
+                    <div class="stat-value" id="stat-audiencias">0</div>
+                    <div class="stat-label">Audiências</div>
+                </div>
+            </div>
+            <div class="stat-card">
+                <span class="stat-icon">⏰</span>
+                <div>
+                    <div class="stat-value" id="stat-prazos">0</div>
+                    <div class="stat-label">Prazos</div>
+                </div>
+            </div>
+            <div class="stat-card urgent" id="stat-urgent-card">
+                <span class="stat-icon">🔴</span>
+                <div>
+                    <div class="stat-value" id="stat-urgentes">0</div>
+                    <div class="stat-label">Urgentes</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Controls -->
+        <div class="controls">
+            <div class="search-box">
+                <input type="text" id="search" placeholder="Buscar por cliente, processo ou título...">
+            </div>
+            <select id="filter">
+                <option value="todos">Todos os tipos</option>
+                <option value="audiencia">⚖️ Audiência</option>
+                <option value="prazo">⏰ Prazo Processual</option>
+                <option value="reuniao">👥 Reunião</option>
+                <option value="pericia">📋 Perícia</option>
+                <option value="protocolo">📄 Protocolo</option>
+                <option value="outro">📌 Outro</option>
+            </select>
+        </div>
+
+        <!-- Main Layout -->
+        <div class="main-layout">
+            <!-- Calendar -->
+            <div class="calendar-card">
+                <div class="calendar-header">
+                    <button class="nav-btn" id="prev-month">‹</button>
+                    <div class="month-title">
+                        <h2 id="month-name">Fevereiro</h2>
+                        <span id="year">2026</span>
+                    </div>
+                    <button class="nav-btn" id="next-month">›</button>
+                </div>
+                <div class="weekdays">
+                    <div class="weekday weekend">Dom</div>
+                    <div class="weekday">Seg</div>
+                    <div class="weekday">Ter</div>
+                    <div class="weekday">Qua</div>
+                    <div class="weekday">Qui</div>
+                    <div class="weekday">Sex</div>
+                    <div class="weekday weekend">Sáb</div>
+                </div>
+                <div class="days-grid" id="days-grid"></div>
+            </div>
+
+            <!-- Sidebar -->
+            <div class="sidebar">
+                <!-- Day Panel -->
+                <div class="panel">
+                    <div class="panel-header">
+                        <div class="panel-header-content">
+                            <div>
+                                <small id="selected-weekday">Selecione um dia</small>
+                                <h3 id="selected-date">—</h3>
+                            </div>
+                            <button class="add-btn" id="add-event-btn" title="Adicionar evento">+</button>
+                        </div>
+                    </div>
+                    <div class="panel-body" id="day-events">
+                        <div class="empty-state">
+                            <div class="icon">👆</div>
+                            <p>Clique em um dia no calendário</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="panel">
+                    <div class="quick-actions" id="quick-actions">
+                        <button class="quick-btn" data-type="audiencia" disabled>
+                            <span class="icon">⚖️</span>
+                            <span class="label">Audiência</span>
+                        </button>
+                        <button class="quick-btn" data-type="prazo" disabled>
+                            <span class="icon">⏰</span>
+                            <span class="label">Prazo</span>
+                        </button>
+                        <button class="quick-btn" data-type="reuniao" disabled>
+                            <span class="icon">👥</span>
+                            <span class="label">Reunião</span>
+                        </button>
+                        <button class="quick-btn" data-type="pericia" disabled>
+                            <span class="icon">📋</span>
+                            <span class="label">Perícia</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Legend -->
+                <div class="panel">
+                    <div class="legend">
+                        <h4>Legenda</h4>
+                        <div class="legend-items">
+                            <div class="legend-item">
+                                <div class="legend-color" style="background: #f59e0b;"></div>
+                                <span>⚖️ Audiência</span>
+                            </div>
+                            <div class="legend-item">
+                                <div class="legend-color" style="background: #ef4444;"></div>
+                                <span>⏰ Prazo Processual</span>
+                            </div>
+                            <div class="legend-item">
+                                <div class="legend-color" style="background: #3b82f6;"></div>
+                                <span>👥 Reunião</span>
+                            </div>
+                            <div class="legend-item">
+                                <div class="legend-color" style="background: #a855f7;"></div>
+                                <span>📋 Perícia</span>
+                            </div>
+                            <div class="legend-item">
+                                <div class="legend-color" style="background: #22c55e;"></div>
+                                <span>📄 Protocolo</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>© 2026 <span>Victor Hugo Advogados</span> • Advocacia Humanizada, Especializada e Estratégica</p>
+        </footer>
+    </div>
+
+    <!-- Modal Adicionar -->
+    <div class="modal-overlay" id="modal-add">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>Novo Evento</h3>
+                <button class="close-btn" onclick="closeModal('modal-add')">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="date-display">
+                    <span class="icon">📅</span>
+                    <div>
+                        <div class="date" id="modal-date">5 de Fevereiro de 2026</div>
+                        <div class="weekday" id="modal-weekday">Quinta-feira</div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Título *</label>
+                    <input type="text" id="input-titulo" placeholder="Ex: Audiência de instrução">
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Tipo</label>
+                        <select id="input-tipo">
+                            <option value="audiencia">⚖️ Audiência</option>
+                            <option value="prazo">⏰ Prazo Processual</option>
+                            <option value="reuniao">👥 Reunião</option>
+                            <option value="pericia">📋 Perícia</option>
+                            <option value="protocolo">📄 Protocolo</option>
+                            <option value="outro">📌 Outro</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Horário</label>
+                        <input type="time" id="input-hora" value="09:00">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Cliente</label>
+                    <input type="text" id="input-cliente" placeholder="Nome do cliente">
+                </div>
+
+                <div class="form-group">
+                    <label>Nº do Processo</label>
+                    <input type="text" id="input-processo" placeholder="0000000-00.0000.0.00.0000">
+                </div>
+
+                <div class="form-group">
+                    <label>Prioridade</label>
+                    <div class="priority-options">
+                        <button type="button" class="priority-option alta" data-priority="alta">Alta</button>
+                        <button type="button" class="priority-option media active" data-priority="media">Média</button>
+                        <button type="button" class="priority-option baixa" data-priority="baixa">Baixa</button>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Observações</label>
+                    <textarea id="input-descricao" placeholder="Notas adicionais..."></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('modal-add')">Cancelar</button>
+                <button class="btn btn-primary" id="btn-save">Salvar Evento</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Detalhes -->
+    <div class="modal-overlay" id="modal-details">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 id="detail-title">Detalhes do Evento</h3>
+                <button class="close-btn" onclick="closeModal('modal-details')">×</button>
+            </div>
+            <div class="modal-body" id="detail-body"></div>
+            <div class="modal-footer">
+                <button class="btn btn-danger" id="btn-delete">🗑️ Excluir</button>
+                <button class="btn btn-secondary" onclick="closeModal('modal-details')">Fechar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast -->
+    <div class="toast" id="toast">
+        <span class="icon">✅</span>
+        <span class="message" id="toast-message">Evento salvo com sucesso!</span>
+    </div>
+
+    <script>
+        // Estado da aplicação
+        let currentDate = new Date(2026, 1, 1); // Fevereiro 2026
+        let selectedDay = null;
+        let events = {};
+        let selectedPriority = 'media';
+        let currentEventId = null;
+
+        const meses = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 
+                       'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
+        const diasSemana = ['Domingo', 'Segunda-feira', 'Terça-feira', 'Quarta-feira', 
+                           'Quinta-feira', 'Sexta-feira', 'Sábado'];
+        const tiposEvento = {
+            audiencia: { label: 'Audiência', icon: '⚖️' },
+            prazo: { label: 'Prazo Processual', icon: '⏰' },
+            reuniao: { label: 'Reunião', icon: '👥' },
+            pericia: { label: 'Perícia', icon: '📋' },
+            protocolo: { label: 'Protocolo', icon: '📄' },
+            outro: { label: 'Outro', icon: '📌' }
+        };
+
+        // Carregar eventos do localStorage
+        function loadEvents() {
+            const saved = localStorage.getItem('vh-calendario-events');
+            if (saved) {
+                events = JSON.parse(saved);
+            }
+        }
+
+        // Salvar eventos no localStorage
+        function saveEvents() {
+            localStorage.setItem('vh-calendario-events', JSON.stringify(events));
+        }
+
+        // Obter chave da data
+        function getDateKey(day) {
+            return `${currentDate.getFullYear()}-${String(currentDate.getMonth() + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+        }
+
+        // Dias no mês
+        function getDaysInMonth(date) {
+            return new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
+        }
+
+        // Primeiro dia do mês
+        function getFirstDayOfMonth(date) {
+            return new Date(date.getFullYear(), date.getMonth(), 1).getDay();
+        }
+
+        // Filtrar eventos
+        function getFilteredEvents(dayEvents) {
+            if (!dayEvents) return [];
+            const filter = document.getElementById('filter').value;
+            const search = document.getElementById('search').value.toLowerCase();
+            
+            let filtered = dayEvents;
+            
+            if (filter !== 'todos') {
+                filtered = filtered.filter(e => e.tipo === filter);
+            }
+            
+            if (search) {
+                filtered = filtered.filter(e => 
+                    e.titulo.toLowerCase().includes(search) ||
+                    (e.cliente && e.cliente.toLowerCase().includes(search)) ||
+                    (e.processo && e.processo.toLowerCase().includes(search))
+                );
+            }
+            
+            return filtered.sort((a, b) => a.hora.localeCompare(b.hora));
+        }
+
+        // Atualizar estatísticas
+        function updateStats() {
+            const daysInMonth = getDaysInMonth(currentDate);
+            let total = 0, audiencias = 0, prazos = 0, urgentes = 0;
+
+            for (let day = 1; day <= daysInMonth; day++) {
+                const dateKey = getDateKey(day);
+                const dayEvents = getFilteredEvents(events[dateKey]);
+                total += dayEvents.length;
+                audiencias += dayEvents.filter(e => e.tipo === 'audiencia').length;
+                prazos += dayEvents.filter(e => e.tipo === 'prazo').length;
+                urgentes += dayEvents.filter(e => e.prioridade === 'alta').length;
+            }
+
+            document.getElementById('stat-total').textContent = total;
+            document.getElementById('stat-audiencias').textContent = audiencias;
+            document.getElementById('stat-prazos').textContent = prazos;
+            document.getElementById('stat-urgentes').textContent = urgentes;
+
+            const urgentCard = document.getElementById('stat-urgent-card');
+            if (urgentes > 0) {
+                urgentCard.classList.add('urgent');
+            } else {
+                urgentCard.classList.remove('urgent');
+            }
+        }
+
+        // Renderizar calendário
+        function renderCalendar() {
+            const grid = document.getElementById('days-grid');
+            grid.innerHTML = '';
+
+            const daysInMonth = getDaysInMonth(currentDate);
+            const firstDay = getFirstDayOfMonth(currentDate);
+
+            document.getElementById('month-name').textContent = meses[currentDate.getMonth()];
+            document.getElementById('year').textContent = currentDate.getFullYear();
+
+            // Células vazias
+            for (let i = 0; i < firstDay; i++) {
+                const cell = document.createElement('div');
+                cell.className = 'day-cell empty';
+                grid.appendChild(cell);
+            }
+
+            // Dias do mês
+            for (let day = 1; day <= daysInMonth; day++) {
+                const cell = document.createElement('div');
+                const dateKey = getDateKey(day);
+                const dayEvents = getFilteredEvents(events[dateKey]);
+                const dayOfWeek = (firstDay + day - 1) % 7;
+                const isWeekend = dayOfWeek === 0 || dayOfWeek === 6;
+                const isToday = day === 5 && currentDate.getMonth() === 1 && currentDate.getFullYear() === 2026;
+                const isSelected = selectedDay === day;
+                const hasUrgent = dayEvents.some(e => e.prioridade === 'alta');
+
+                cell.className = 'day-cell';
+                if (isWeekend) cell.classList.add('weekend');
+                if (isToday) cell.classList.add('today');
+                if (isSelected) cell.classList.add('selected');
+
+                cell.innerHTML = `
+                    <div class="day-number">
+                        <span>${day}</span>
+                        <div class="day-indicators">
+                            ${hasUrgent ? '<div class="indicator urgent"></div>' : ''}
+                            ${dayEvents.length > 0 ? '<div class="indicator event"></div>' : ''}
+                        </div>
+                    </div>
+                    <div class="day-events">
+                        ${dayEvents.slice(0, 2).map(e => `
+                            <div class="event-pill ${e.tipo}">${e.hora} ${e.titulo}</div>
+                        `).join('')}
+                        ${dayEvents.length > 2 ? `<div class="more-events">+${dayEvents.length - 2} mais</div>` : ''}
+                    </div>
+                `;
+
+                cell.addEventListener('click', () => selectDay(day));
+                grid.appendChild(cell);
+            }
+
+            updateStats();
+        }
+
+        // Selecionar dia
+        function selectDay(day) {
+            selectedDay = day;
+            renderCalendar();
+            updateDayPanel();
+            updateQuickActions();
+        }
+
+        // Atualizar painel do dia
+        function updateDayPanel() {
+            const weekdayEl = document.getElementById('selected-weekday');
+            const dateEl = document.getElementById('selected-date');
+            const eventsEl = document.getElementById('day-events');
+
+            if (!selectedDay) {
+                weekdayEl.textContent = 'Selecione um dia';
+                dateEl.textContent = '—';
+                eventsEl.innerHTML = `
+                    <div class="empty-state">
+                        <div class="icon">👆</div>
+                        <p>Clique em um dia no calendário</p>
+                    </div>
+                `;
+                return;
+            }
+
+            const dayOfWeek = (getFirstDayOfMonth(currentDate) + selectedDay - 1) % 7;
+            weekdayEl.textContent = diasSemana[dayOfWeek];
+            dateEl.textContent = `${selectedDay} de ${meses[currentDate.getMonth()]}`;
+
+            const dateKey = getDateKey(selectedDay);
+            const dayEvents = getFilteredEvents(events[dateKey]);
+
+            if (dayEvents.length === 0) {
+                eventsEl.innerHTML = `
+                    <div class="empty-state">
+                        <div class="icon">📭</div>
+                        <p>Nenhum evento neste dia</p>
+                        <p style="margin-top: 10px; font-size: 12px; color: #f59e0b; cursor: pointer;" onclick="openAddModal()">+ Adicionar evento</p>
+                    </div>
+                `;
+                return;
+            }
+
+            eventsEl.innerHTML = dayEvents.map(e => `
+                <div class="event-item ${e.tipo}" onclick="showEventDetails('${dateKey}', ${e.id})">
+                    <div class="event-item-header">
+                        <span class="icon">${tiposEvento[e.tipo].icon}</span>
+                        <span class="title">${e.titulo}</span>
+                        <span class="priority-badge ${e.prioridade}">${e.prioridade.charAt(0).toUpperCase() + e.prioridade.slice(1)}</span>
+                    </div>
+                    <div class="event-item-details">
+                        <span>🕐 ${e.hora}</span>
+                        ${e.cliente ? `<span>👤 ${e.cliente}</span>` : ''}
+                        ${e.processo ? `<span>📁 ${e.processo}</span>` : ''}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Atualizar ações rápidas
+        function updateQuickActions() {
+            const buttons = document.querySelectorAll('.quick-btn');
+            buttons.forEach(btn => {
+                btn.disabled = !selectedDay;
+            });
+        }
+
+        // Abrir modal de adicionar
+        function openAddModal(tipo = null) {
+            if (!selectedDay) {
+                showToast('Selecione um dia primeiro!');
+                return;
+            }
+
+            const dayOfWeek = (getFirstDayOfMonth(currentDate) + selectedDay - 1) % 7;
+            document.getElementById('modal-date').textContent = `${selectedDay} de ${meses[currentDate.getMonth()]} de ${currentDate.getFullYear()}`;
+            document.getElementById('modal-weekday').textContent = diasSemana[dayOfWeek];
+
+            // Resetar form
+            document.getElementById('input-titulo').value = '';
+            document.getElementById('input-tipo').value = tipo || 'audiencia';
+            document.getElementById('input-hora').value = '09:00';
+            document.getElementById('input-cliente').value = '';
+            document.getElementById('input-processo').value = '';
+            document.getElementById('input-descricao').value = '';
+            selectedPriority = 'media';
+            updatePriorityButtons();
+
+            openModal('modal-add');
+        }
+
+        // Mostrar detalhes do evento
+        function showEventDetails(dateKey, eventId) {
+            const dayEvents = events[dateKey];
+            const event = dayEvents.find(e => e.id === eventId);
+            if (!event) return;
+
+            currentEventId = { dateKey, eventId };
+
+            document.getElementById('detail-title').textContent = event.titulo;
+            document.getElementById('detail-body').innerHTML = `
+                <div style="display: flex; flex-direction: column; gap: 16px;">
+                    <div style="display: flex; align-items: center; gap: 12px;">
+                        <div style="width: 44px; height: 44px; background: rgba(51, 65, 85, 0.5); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 20px;">
+                            ${tiposEvento[event.tipo].icon}
+                        </div>
+                        <div>
+                            <div style="color: #94a3b8; font-size: 12px;">Tipo</div>
+                            <div style="font-weight: 500;">${tiposEvento[event.tipo].label}</div>
+                        </div>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 12px;">
+                        <div style="width: 44px; height: 44px; background: rgba(51, 65, 85, 0.5); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 20px;">🕐</div>
+                        <div>
+                            <div style="color: #94a3b8; font-size: 12px;">Horário</div>
+                            <div style="font-weight: 500;">${event.hora}</div>
+                        </div>
+                    </div>
+                    ${event.cliente ? `
+                    <div style="display: flex; align-items: center; gap: 12px;">
+                        <div style="width: 44px; height: 44px; background: rgba(51, 65, 85, 0.5); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 20px;">👤</div>
+                        <div>
+                            <div style="color: #94a3b8; font-size: 12px;">Cliente</div>
+                            <div style="font-weight: 500;">${event.cliente}</div>
+                        </div>
+                    </div>
+                    ` : ''}
+                    ${event.processo ? `
+                    <div style="display: flex; align-items: center; gap: 12px;">
+                        <div style="width: 44px; height: 44px; background: rgba(51, 65, 85, 0.5); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 20px;">📁</div>
+                        <div>
+                            <div style="color: #94a3b8; font-size: 12px;">Processo</div>
+                            <div style="font-weight: 500;">${event.processo}</div>
+                        </div>
+                    </div>
+                    ` : ''}
+                    <div style="display: flex; align-items: center; gap: 12px;">
+                        <div style="width: 44px; height: 44px; background: rgba(51, 65, 85, 0.5); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 20px;">🎯</div>
+                        <div>
+                            <div style="color: #94a3b8; font-size: 12px;">Prioridade</div>
+                            <span class="priority-badge ${event.prioridade}">${event.prioridade.charAt(0).toUpperCase() + event.prioridade.slice(1)}</span>
+                        </div>
+                    </div>
+                    ${event.descricao ? `
+                    <div style="padding: 12px; background: rgba(51, 65, 85, 0.3); border-radius: 10px;">
+                        <div style="color: #94a3b8; font-size: 12px; margin-bottom: 4px;">Observações</div>
+                        <div>${event.descricao}</div>
+                    </div>
+                    ` : ''}
+                </div>
+            `;
+
+            openModal('modal-details');
+        }
+
+        // Salvar evento
+        function saveEvent() {
+            const titulo = document.getElementById('input-titulo').value.trim();
+            if (!titulo) {
+                showToast('Digite um título para o evento!');
+                return;
+            }
+
+            const dateKey = getDateKey(selectedDay);
+            const newEvent = {
+                id: Date.now(),
+                titulo,
+                tipo: document.getElementById('input-tipo').value,
+                hora: document.getElementById('input-hora').value,
+                cliente: document.getElementById('input-cliente').value.trim(),
+                processo: document.getElementById('input-processo').value.trim(),
+                prioridade: selectedPriority,
+                descricao: document.getElementById('input-descricao').value.trim()
+            };
+
+            if (!events[dateKey]) {
+                events[dateKey] = [];
+            }
+            events[dateKey].push(newEvent);
+            saveEvents();
+
+            closeModal('modal-add');
+            renderCalendar();
+            updateDayPanel();
+            showToast('Evento salvo com sucesso!');
+        }
+
+        // Excluir evento
+        function deleteEvent() {
+            if (!currentEventId) return;
+
+            const { dateKey, eventId } = currentEventId;
+            events[dateKey] = events[dateKey].filter(e => e.id !== eventId);
+            
+            if (events[dateKey].length === 0) {
+                delete events[dateKey];
+            }
+            
+            saveEvents();
+            closeModal('modal-details');
+            renderCalendar();
+            updateDayPanel();
+            showToast('Evento excluído!');
+        }
+
+        // Atualizar botões de prioridade
+        function updatePriorityButtons() {
+            document.querySelectorAll('.priority-option').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.dataset.priority === selectedPriority) {
+                    btn.classList.add('active');
+                }
+            });
+        }
+
+        // Abrir modal
+        function openModal(id) {
+            document.getElementById(id).classList.add('active');
+        }
+
+        // Fechar modal
+        function closeModal(id) {
+            document.getElementById(id).classList.remove('active');
+        }
+
+        // Mostrar toast
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toast-message').textContent = message;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 3000);
+        }
+
+        // Event Listeners
+        document.addEventListener('DOMContentLoaded', () => {
+            loadEvents();
+            renderCalendar();
+
+            // Navegação de mês
+            document.getElementById('prev-month').addEventListener('click', () => {
+                currentDate = new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, 1);
+                selectedDay = null;
+                renderCalendar();
+                updateDayPanel();
+                updateQuickActions();
+            });
+
+            document.getElementById('next-month').addEventListener('click', () => {
+                currentDate = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 1);
+                selectedDay = null;
+                renderCalendar();
+                updateDayPanel();
+                updateQuickActions();
+            });
+
+            // Botão adicionar
+            document.getElementById('add-event-btn').addEventListener('click', () => openAddModal());
+
+            // Salvar evento
+            document.getElementById('btn-save').addEventListener('click', saveEvent);
+
+            // Excluir evento
+            document.getElementById('btn-delete').addEventListener('click', deleteEvent);
+
+            // Prioridade
+            document.querySelectorAll('.priority-option').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    selectedPriority = btn.dataset.priority;
+                    updatePriorityButtons();
+                });
+            });
+
+            // Quick actions
+            document.querySelectorAll('.quick-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    if (selectedDay) {
+                        openAddModal(btn.dataset.type);
+                    }
+                });
+            });
+
+            // Filtros
+            document.getElementById('filter').addEventListener('change', () => {
+                renderCalendar();
+                updateDayPanel();
+            });
+
+            document.getElementById('search').addEventListener('input', () => {
+                renderCalendar();
+                updateDayPanel();
+            });
+
+            // Fechar modais clicando fora
+            document.querySelectorAll('.modal-overlay').forEach(overlay => {
+                overlay.addEventListener('click', (e) => {
+                    if (e.target === overlay) {
+                        overlay.classList.remove('active');
+                    }
+                });
+            });
+
+            // Enter para salvar
+            document.getElementById('input-titulo').addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') saveEvent();
+            });
+        });
+    </script>
+</body>
+</html>
