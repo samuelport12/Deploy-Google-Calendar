@@ -26,17 +26,30 @@ const tokenCount = document.getElementById('tokenCount');
 /**
  * Exibe/oculta estado de carregamento
  */
+// Substitua sua função setLoading por esta:
 function setLoading(isLoading) {
+    const btn = document.getElementById('btnGerar');
+    const loadingText = document.querySelector('#loadingState p');
+    
+    // Frases que mudam rápido para dar sensação de velocidade
+    const msgs = ["Lendo dados...", "Analisando CIDs...", "Redigindo...", "Finalizando..."];
+    
     if (isLoading) {
         btn.disabled = true;
-        btn.innerHTML = '<i class="ph ph-spinner animate-spin text-lg"></i> Processando...';
-        btn.classList.add('opacity-75', 'cursor-not-allowed');
-        loadingState.classList.remove('hidden');
+        document.getElementById('loadingState').classList.remove('hidden');
+        
+        let i = 0;
+        loadingText.innerText = msgs[0];
+        // Troca a frase a cada 800ms (bem rápido)
+        window.loadingInterval = setInterval(() => {
+            i = (i + 1) % msgs.length;
+            loadingText.innerText = msgs[i];
+        }, 800);
+        
     } else {
         btn.disabled = false;
-        btn.innerHTML = '<span class="absolute left-0 inset-y-0 flex items-center pl-3"><i class="ph-bold ph-sparkle text-primary-300 group-hover:text-white transition-colors"></i></span> Gerar Análise Jurídica';
-        btn.classList.remove('opacity-75', 'cursor-not-allowed');
-        loadingState.classList.add('hidden');
+        document.getElementById('loadingState').classList.add('hidden');
+        clearInterval(window.loadingInterval);
     }
 }
 
